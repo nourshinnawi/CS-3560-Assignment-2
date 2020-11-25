@@ -1,54 +1,28 @@
 
-package a2;
+package assignment.pkg2;
 
-
-public final class PercentPositiveTweets implements Count{
+public class PercentPositiveTweets {
+    private static final String positiveWords[]  = { "fun", "excited", "happy", 
+                                                     "great", "amazing", "awesome", 
+                                                     "cool", "wonderful", "nice" };
     
-    private int totalTweets;
-    private int count;
-    
-    private final String positiveWords[]  = { "fun", "excited", "happy", 
-                                    "great", "amazing", "awesome", 
-                                    "cool", "wonderful", "nice" };
-    
-    public PercentPositiveTweets() {
-        setTotalTweets(0);
-        setCount(0);
-    }
-    
-    public int getTotalTweets() {
-        return totalTweets;
-    }
-    
-    public void setTotalTweets (int totalTweets) {
-        this.totalTweets = totalTweets;
-    }
-    
-    public int getCount () {
-        return count;
-    }
-    
-    public void setCount (int count) {
-        this.count = count;
-    }
-    
-    public float calculatePercent () {
-        float percent = (count / totalTweets) * 100;
-        return percent;
-    }
-    
-    @Override
-    public void countUsers(UserView user) {
-        for(Object twts: user.getNewsFeed().toArray()) {
-            for (int i = 0; i < positiveWords.length; i++) {
-                if (twts.toString().toLowerCase().contains(positiveWords[i])) {
-                    setCount(getCount() + 1);
+    public static float calculatePercent() {
+        twitterInfo twt = twitterInfo.getInstance();
+        float positiveTweets = 0;
+        for(Tweets tweet : twt.getTweet()) {
+            for (String positive: positiveWords) {
+                if (tweet.getPosts().toLowerCase().contains(positive)) {
+                    positiveTweets = (float) (positiveTweets + 1.0);
+                    break;
                 }
             }
-            setTotalTweets(getTotalTweets() + 1);
+        }
+        if (twt.tweetTotal() == 0) {
+            return 0;
+        }
+        else {
+            float percent = (positiveTweets / twt.tweetTotal()) * 100;
+            return percent;
         }
     }
-    
-    @Override
-    public void countGroups(UserGroup group) {}
 }
