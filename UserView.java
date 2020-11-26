@@ -89,7 +89,7 @@ public class UserView extends JPanel implements ActionListener, Observer {
         if (command.equals("Follow")) {
             String follow = JOptionPane.showInputDialog(null, "Enter user: ");
             follow = "User " + follow;
-            if (follow.equals("User null")) {//might delete
+            if (follow.equals("User null")) {
                 JOptionPane.showMessageDialog(null,
                                       "Invalid user. Try again.", "Error",
                                       JOptionPane.ERROR_MESSAGE);
