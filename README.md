@@ -3,4 +3,4 @@ MiniTwitter:
 - Fixed errors and did the singleton and observer patterns.
 - Will try to do the composite and visitor patterns for A3
 
-Link to Youtube video: https://youtu.be/qHx3-hgZREY
+Link to Youtube video: 
