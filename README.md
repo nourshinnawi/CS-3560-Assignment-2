@@ -1,6 +1,6 @@
 # CS-3560-Assignment-2
 MiniTwitter:
-- Has some errors and is missing comments
-- Not completely done yet
+- Fixed errors and did the singleton and observer patterns.
+- Will try to do the composite and visitor patterns for A3
 
 Link to Youtube video: 
