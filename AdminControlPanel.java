@@ -1,4 +1,3 @@
-
 package assignment.pkg2;
 
 import java.awt.BorderLayout;
@@ -14,8 +13,8 @@ import javax.swing.JPanel;
 public class AdminControlPanel extends JPanel implements ActionListener {
     
     private static AdminControlPanel instance = null;
-    private static final Tree tree = Tree.getInstance();;
-    private static final twitterInfo twt = twitterInfo.getInstance();
+    private static Tree tree = Tree.getInstance();;
+    private static twitterInfo twt = twitterInfo.getInstance();
     
     //part of Singleton pattern
     public static AdminControlPanel getInstance() {
@@ -57,10 +56,20 @@ public class AdminControlPanel extends JPanel implements ActionListener {
         positivePercentageButton.setActionCommand(positivePercentageButton.getText());
         positivePercentageButton.addActionListener(this);
         
+        //Assignment #3 addition - 1. User/Group ID verification
+        JButton verifyIDButton = new JButton("Validate IDs");
+        verifyIDButton.setActionCommand(verifyIDButton.getText());
+        verifyIDButton.addActionListener(this);
+        
+        //Assignment #3 addition - 4. Find the last updated User
+        JButton findLastUpdatedButton = new JButton("Find Last Updated User");
+        findLastUpdatedButton.setActionCommand(findLastUpdatedButton.getText());
+        findLastUpdatedButton.addActionListener(this);
+        
         tree.setPreferredSize(new Dimension(300, 500));
         add(tree, BorderLayout.CENTER);
         
-        JPanel panel = new JPanel(new GridLayout(7, 1));
+        JPanel panel = new JPanel(new GridLayout(9, 1));
         panel.add(addUserButton);
         panel.add(addGroupButton);
         panel.add(openUserButton);
@@ -68,6 +77,9 @@ public class AdminControlPanel extends JPanel implements ActionListener {
         panel.add(groupTotalButton);
         panel.add(tweetTotalButton);
         panel.add(positivePercentageButton);
+        //Assignment #3 addition
+        panel.add(verifyIDButton);
+        panel.add(findLastUpdatedButton);
         add(panel, BorderLayout.EAST);
     }
     
@@ -83,25 +95,25 @@ public class AdminControlPanel extends JPanel implements ActionListener {
                     if (!select.equals("Root")) {
                         if (select.substring(0, 4).equals("User")) {
                             JOptionPane.showMessageDialog(null,
-                                    "Cannot add a usser to a user."
-                                    + "Please select a group to add a user to.",
+                                    "Cannot add a usser to a user. "
+                                    + "Please select a group to add a user to. ",
                                     "Error",
                                     JOptionPane.ERROR_MESSAGE);
                             return;
                         }
                     }       
                     String user = JOptionPane.showInputDialog(
-                                              null, "Enter username:");
+                                              null, "Enter username: ");
                     user = "User " + user;
                     if (user.equals("User null")) {
                         JOptionPane.showMessageDialog(null, 
-                                "User does not exist",
+                                "User does not exist. ",
                                 "Error",
                                 JOptionPane.ERROR_MESSAGE);
                     }
                     else if (twt.containsUser(user)) {
                         JOptionPane.showMessageDialog(null,
-                                user + " already exists", "Error",
+                                user + " already exists. ", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                     }
                     else {
@@ -115,24 +127,24 @@ public class AdminControlPanel extends JPanel implements ActionListener {
                     if (select.substring(0,4).equals("User")) {
                         JOptionPane.showMessageDialog(null,
                                 "Cannot add a group to a user. "
-                                + "Please select a group to add to.", 
+                                + "Please select a group to add to. ", 
                                 "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 }   
                 String group = JOptionPane.showInputDialog(
-                                           null, "Enter group:");
+                                           null, "Enter group: ");
                 group = "Group " + group;
                 if (group.equals("Group null")) {
                     JOptionPane.showMessageDialog(null,
-                            "Group could not be created",
+                            "Group could not be created. ",
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
                 else if (twt.containsGroup(group)) {
                     JOptionPane.showMessageDialog(null,
-                            "That group already exists",
+                            "That group already exists. ",
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
@@ -146,7 +158,7 @@ public class AdminControlPanel extends JPanel implements ActionListener {
                     if (select.equals("Root") || 
                             !select.substring(0, 4).equals("User")) {
                         JOptionPane.showMessageDialog(null, 
-                                "Please select a user",
+                                "Please select a user. ",
                                 "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
@@ -171,6 +183,31 @@ public class AdminControlPanel extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(null,
                         "Percent Positive Tweets: " +
                         PercentPositiveTweets.calculatePercent() + "%");
+                break;
+            //Assignment #3 addition - 1. User/Group ID verification    
+            case "Validate IDs":
+                if (twt.validateIDs()) {
+                    JOptionPane.showMessageDialog(null, 
+                            "All current IDs are valid. " );
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, 
+                            "Invalid IDs found. ", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            //Assignment #3 addition - 4. Find the last updated User    
+            case "Find Last Updated User":
+                User lastUpdatedUser = twt.lastUpdated();
+                if (lastUpdatedUser == null) {
+                    JOptionPane.showMessageDialog(null, "No users available. ",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "The last updated user is "
+                            + lastUpdatedUser.getID());
+                }
                 break;
             default:
                 break;
