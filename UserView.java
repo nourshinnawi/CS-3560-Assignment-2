@@ -1,4 +1,3 @@
-
 package assignment.pkg2;
 
 import java.awt.BorderLayout;
@@ -7,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.Iterator;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,8 +18,8 @@ import javax.swing.JTextArea;
 
 public class UserView extends JPanel implements ActionListener, Observer {
     
-    private final twitterInfo twt;
-    private final User users;
+    private twitterInfo twt;
+    private User users;
     
     private JFrame frame;
     
@@ -33,6 +33,8 @@ public class UserView extends JPanel implements ActionListener, Observer {
     private final JScrollPane newsFeedScroll;
     private final JScrollPane tweetsScroll;
     
+    private JLabel userLabel;
+    
     public UserView(String users) {
         super(new BorderLayout());
         
@@ -40,8 +42,12 @@ public class UserView extends JPanel implements ActionListener, Observer {
         this.users = twt.getUser(users);
         
         contentPanel = new JPanel();
-        JLabel userLabel = new JLabel(users + "'s Profile");
-        userLabel.setFont(new Font("Plain", Font.BOLD, 30));
+        //Assignment #3 addition
+        Date creationDate = new Date(this.users.getCreationTime());
+        Date lastUpdateDate = new Date(this.users.getLastUpdateTime());
+        userLabel = new JLabel(users + "'s Profile" + "Created on " + 
+                creationDate + "Last updated on " + lastUpdateDate);
+        userLabel.setFont(new Font("Plain", Font.BOLD, 20));
         contentPanel.add(userLabel, BorderLayout.NORTH);
         
         newsFeedPanel = new JPanel();
@@ -70,7 +76,7 @@ public class UserView extends JPanel implements ActionListener, Observer {
         tweetButton.setActionCommand(tweetButton.getText());
         tweetButton.addActionListener(this);
         
-        contentPanel.setPreferredSize(new Dimension(550, 600));
+        contentPanel.setPreferredSize(new Dimension(550, 650));
         add(contentPanel, BorderLayout.CENTER);
         
         JPanel panel = new JPanel(new GridLayout(7,1));
@@ -91,12 +97,12 @@ public class UserView extends JPanel implements ActionListener, Observer {
             follow = "User " + follow;
             if (follow.equals("User null")) {
                 JOptionPane.showMessageDialog(null,
-                                      "Invalid user. Try again.", "Error",
+                                      "Invalid user. Try again. ", "Error",
                                       JOptionPane.ERROR_MESSAGE);
             }
             else if (!twt.containsUser(follow)) {
                 JOptionPane.showMessageDialog(null,
-                                      "User entered does not exist", "Error",
+                                      "User entered does not exist. ", "Error",
                                       JOptionPane.ERROR_MESSAGE);
             }
             else if (users.following(follow)) {
@@ -107,15 +113,15 @@ public class UserView extends JPanel implements ActionListener, Observer {
             users.follow(follow);
         }
         else if (command.equals("Tweet")) {
-            String tweet = JOptionPane.showInputDialog(null, "Enter tweet:");
+            String tweet = JOptionPane.showInputDialog(null, "Enter tweet: ");
             if (tweet == null) {
-                JOptionPane.showMessageDialog(null, "Invalid tweet", "Error",
+                JOptionPane.showMessageDialog(null, "Invalid tweet. ", "Error",
                                       JOptionPane.ERROR_MESSAGE);
             }
             else if (tweet.length() > 280) {
                 JOptionPane.showMessageDialog(null,
-                                      "Tweet is too long",
-                                      "It must be shorter than 280 characters",
+                                      "Tweet is too long. ",
+                                      "It must be shorter than 280 characters.",
                                       JOptionPane.ERROR_MESSAGE);
             }
             else {
@@ -150,10 +156,20 @@ public class UserView extends JPanel implements ActionListener, Observer {
             if (userName != users) {
                 newsFeed.append(userName.getID() + "\n");
             }
-            tweets.setText("");
-            users.getNewsFeed().forEach((tweet) -> {
-                tweets.append(tweet.getTweets() + "\n");
-            });
         }
+        String oldTweet = tweets.getText();
+        tweets.setText("");
+        users.getNewsFeed().forEach((tweet) -> {
+            tweets.append(tweet.getTweets() + "\n");
+        });
+        if (!tweets.getText().equals(oldTweet)){
+            users.setUpdateTime();
+        }
+        //Assignment #3 additions
+        Date creationDate = new Date(this.users.getCreationTime());
+        Date lastUpdateDate = new Date(this.users.getLastUpdateTime());
+        userLabel.setText("<html>" + users.getID() + "'s Profile"
+                + "<br> Created on " + creationDate 
+                + "<br> Last updated on " + lastUpdateDate + "<html>");
     }
 }
