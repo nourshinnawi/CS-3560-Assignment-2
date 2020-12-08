@@ -1,4 +1,3 @@
-
 package assignment.pkg2;
 
 import java.util.ArrayList;
@@ -6,14 +5,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Groups {
-    private final twitterInfo twt;
-    private final String ID;
+    private twitterInfo twt;
+    private String ID;
     private Map<String, User> users;
+    //Assignment #3 addtiton - 2. Add creation time attribute to User and Group.
+    private long creationTime;
 
     public Groups(String ID) {
         this.twt = twitterInfo.getInstance();
         this.ID = ID;
         this.users = new HashMap<>();
+        //Assignment #3 addtiton - 2. Add creation time attribute to User and Group.
+        this.creationTime = System.currentTimeMillis();
     }
     
     public ArrayList<User> getUsers() {
@@ -36,5 +39,10 @@ public class Groups {
         else {
             return false;
         }
+    }
+    
+    //Assignment #3 addtiton - 2. Add creation time attribute to User and Group.
+    public long getCreationTime() {
+        return creationTime;
     }
 }
