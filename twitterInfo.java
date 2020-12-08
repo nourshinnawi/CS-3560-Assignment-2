@@ -1,8 +1,8 @@
-
 package assignment.pkg2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class twitterInfo implements Observer {
@@ -102,6 +102,39 @@ public class twitterInfo implements Observer {
     public void addTweets(Tweets tweets) {
         tweet.add(tweets);
     }
+    
+    //Assignment #3 addition - 1. User/Group ID verification
+    public boolean validateIDs() {
+        for (Iterator<String> it = user.keySet().iterator(); it.hasNext();) {
+            String users = it.next();
+            if (users.substring(6, users.length()).contains(" ")) {
+                return false;
+            }
+        }
+        for (Iterator<String> it = group.keySet().iterator(); it.hasNext();) {
+            String groups = it.next();
+            if (groups.substring(7, groups.length()).contains(" ")) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    //Assignment #3 addition - 4. Find the last updated User
+     public User lastUpdated() {
+         User lastUpdatedUser = null;
+         for (String users: user.keySet()) {
+             User Users = user.get(users);
+             if (lastUpdatedUser == null){
+                 lastUpdatedUser = Users;
+             }
+             else if (Users.getLastUpdateTime() > 
+                     lastUpdatedUser.getLastUpdateTime()) {
+                 lastUpdatedUser = Users;
+             }
+         }
+         return lastUpdatedUser;
+     }
     
     //part of Observer pattern
     @Override
