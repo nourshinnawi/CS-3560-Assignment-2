@@ -1,4 +1,3 @@
-
 package assignment.pkg2;
 
 import java.util.ArrayList;
@@ -7,10 +6,14 @@ import java.util.Map;
 
 public class User {
     
-    private final twitterInfo twt;
+    private twitterInfo twt;
     private String ID;
     private Map<String, User> followers;
     private Groups group;
+    //Assignment #3 addtiton - 2. Add creation time attribute to User and Group.
+    private long creationTime;
+    //Assignment #3 addtiton - 3. Add last update time attribute to User.
+    private long lastUpdateTime;
 
     public String getID() {
         return ID;
@@ -73,5 +76,22 @@ public class User {
                 followers.put(users.getID(), users);
             });
         }
-    }    
+        //Assignment #3 additions
+        this.creationTime = System.currentTimeMillis();
+        this.lastUpdateTime = System.currentTimeMillis();
+    }
+    
+    //Assignment #3 addtiton - 2. Add creation time attribute to User and Group.
+    public long getCreationTime() {
+        return creationTime;
+    }
+    
+    //Assignment #3 addtiton - 3. Add last update time attribute to User.
+    public long getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+    
+    public void setUpdateTime() {
+        lastUpdateTime = System.currentTimeMillis();
+    }
 }
